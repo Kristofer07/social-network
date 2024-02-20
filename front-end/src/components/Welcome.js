@@ -129,7 +129,7 @@ const Welcome = (props) => {
             props.setAlertMessage("Passwords too short");
         } else if (password !== passwordConfirm) {
             props.setAlertClassName("alert alert-danger");
-            props.setAlertMessage("Passwords don't match");
+            props.setAlertMessage("Passwords dont match");
         } else if (image && !image.name.match(/(gif|jpg|jpeg|png)$/gi)) {
             props.setAlertClassName("alert alert-danger");
             props.setAlertMessage("file type invalid");
@@ -151,8 +151,8 @@ const Welcome = (props) => {
 
     return (
         <div className="row text-center welcome-container">
-            <h2 className="welcome-title">Welcome to the Cinema Club</h2>
-            <p className="welcome-subtitle">Join Cinema Club! 🍿 Log in/sign up for movie magic</p>
+            <h2 className="welcome-title">Welcome to the dunder mingle</h2>
+            <p className="welcome-subtitle">Please login or register to start mingling..</p>
             <div className="col-md-4" style={{ borderRight: "1px solid black" }}>
                 <div className=" welcome-logo-div" >
                     <img src={"http://localhost:8080/media/various/logo.png"} alt="Social Network Logo" className="welcome-logo" />

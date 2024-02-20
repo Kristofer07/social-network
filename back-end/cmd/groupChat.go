@@ -21,7 +21,7 @@ type GroupChatJSONResponse struct {
 	Action             string         `json:"action"`
 	Message            string         `json:"message"`
 	UserMessage        models.Message `json:"userMessage"`
-	OnlineGroupMembers []int          `json:"onlineGroupMembers"`
+	OnlineGroupMembers []int          `json:"onlineGroupMemebers"`
 	Error              string         `json:"error"`
 }
 

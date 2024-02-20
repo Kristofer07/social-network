@@ -267,6 +267,13 @@ const fetchFollowers = () => {
 const filterFollowersById = (followers, groupMembers) => {
     return followers.filter(follower => !groupMembers.some(member => member.id === follower.followerId));
 }
+// const alreadyInvited = (invitedUsersIds, followerId) => {
+//     if (invitedUsersIds == null) {
+//       return false;
+//     }
+//     return invitedUsersIds.includes(followerId);
+// }
+
 
 const alreadyInvited = (invitedUsersIds, followerId, invitingUsersIds, currentUserId) => {
     if (invitedUsersIds == null) {

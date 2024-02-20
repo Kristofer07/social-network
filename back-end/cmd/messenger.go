@@ -212,7 +212,7 @@ func SortUsers(userID int, users []models.User) ([]models.User, error) {
 		}
 
 		if senderID == userID {
-			// If my message was last, don't add notification to chat
+			// If my message was last, dont add notification to chat
 			users[i].MessageRead = 1
 		}
 	}

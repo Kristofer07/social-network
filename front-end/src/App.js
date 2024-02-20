@@ -125,7 +125,7 @@ function App() {
                 <Link to="/" className="users-users-link">
                 <img src={"http://localhost:8080/media/various/logo.png"} alt="Social Network Logo" className="welcome-logo-header" />
                 </Link>
-                <h1 className="mt-4 header-name">Cinema Club</h1>
+                <h1 className="mt-4 header-name">dunder mingle</h1>
               </div>
             </div>
             <div className="col text-end">

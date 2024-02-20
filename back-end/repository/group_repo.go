@@ -227,7 +227,7 @@ func CreateGroupEvent(event models.Event) error {
 		if members[i].ID != event.CreatedBy {
 			_, err := database.Exec("INSERT INTO notifications (userId, sourceId, type, createdAt, actioned) VALUES (?, ?, ?, ?, ?)", members[i].ID, int(eventIDInt), "group_event", time.Now().Unix(), "1")
 			if err != nil {
-				log.Println("Create group event notification error: ", err)
+				log.Println("Create group event notificaiton error: ", err)
 				return err
 			}
 		}
@@ -266,7 +266,7 @@ func GetGroupEvents(groupID int) ([]models.Event, error) {
 		var notGoingUsers []models.User
 		rows, err := database.Query(`SELECT userId FROM user_events WHERE eventId = ? AND status = 1`, event.ID)
 		if err != nil {
-			log.Println("get userID by events error: ", err)
+			log.Println("get usetId by events error: ", err)
 			return events, err
 		}
 		defer rows.Close()
@@ -274,7 +274,7 @@ func GetGroupEvents(groupID int) ([]models.Event, error) {
 			var goingUser int
 			err := rows.Scan(&goingUser)
 			if err != nil {
-				log.Println("get userID by events error: ", err)
+				log.Println("get usetId by events error: ", err)
 				return events, err
 			}
 			user, err := GetUserById(goingUser)
@@ -285,7 +285,7 @@ func GetGroupEvents(groupID int) ([]models.Event, error) {
 		}
 		rows, err = database.Query(`SELECT userId FROM user_events WHERE eventId = ? AND status = 0`, event.ID)
 		if err != nil {
-			log.Println("get userID by events error: ", err)
+			log.Println("get usetId by events error: ", err)
 			return events, err
 		}
 		defer rows.Close()
@@ -293,7 +293,7 @@ func GetGroupEvents(groupID int) ([]models.Event, error) {
 			var notGoingUser int
 			err := rows.Scan(&notGoingUser)
 			if err != nil {
-				log.Println("get userID by events error: ", err)
+				log.Println("get usetId by events error: ", err)
 				return events, err
 			}
 			user, err := GetUserById(notGoingUser)
@@ -360,7 +360,7 @@ func AddGroupInvites(groupInvite models.GroupInvite) error {
 		}
 		_, err = database.Exec("INSERT INTO notifications (userId, sourceId, type, createdAt, groupJoinerId) VALUES (?, ?, ?, ?, ?)", groupInvite.InvitedUsersIds[i], groupInvite.GroupId, "group_invitation", time.Now().Unix(), groupInvite.UserId)
 		if err != nil {
-			log.Println("Create group invitation notification error: ", err)
+			log.Println("Create group invitation notificaiton error: ", err)
 			return err
 		}
 	}
@@ -448,7 +448,7 @@ func GetEvent(eventID int) (models.Event, error) {
 	var goingUsers []models.User
 	rows, err := database.Query(`SELECT userId FROM user_events WHERE eventId = ? AND status = 1`, eventID)
 	if err != nil {
-		log.Println("get userID by events error: ", err)
+		log.Println("get usetId by events error: ", err)
 		return event, err
 	}
 	defer rows.Close()
@@ -456,7 +456,7 @@ func GetEvent(eventID int) (models.Event, error) {
 		var goingUser int
 		err := rows.Scan(&goingUser)
 		if err != nil {
-			log.Println("get userID by events error: ", err)
+			log.Println("get usetId by events error: ", err)
 			return event, err
 		}
 		user, err := GetUserById(goingUser)
@@ -469,7 +469,7 @@ func GetEvent(eventID int) (models.Event, error) {
 	var notGoingUsers []models.User
 	rows, err = database.Query(`SELECT userId FROM user_events WHERE eventId = ? AND status = 0`, eventID)
 	if err != nil {
-		log.Println("get userID by events error: ", err)
+		log.Println("get usetId by events error: ", err)
 		return event, err
 	}
 	defer rows.Close()
@@ -477,7 +477,7 @@ func GetEvent(eventID int) (models.Event, error) {
 		var notGoingUser int
 		err := rows.Scan(&notGoingUser)
 		if err != nil {
-			log.Println("get userID by events error: ", err)
+			log.Println("get usetId by events error: ", err)
 			return event, err
 		}
 		user, err := GetUserById(notGoingUser)

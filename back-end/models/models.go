@@ -122,7 +122,7 @@ type Event struct {
 	Description   string    `json:"description"`
 	EventStart    time.Time `json:"eventStart"`
 	EventEnd      time.Time `json:"eventEnd"`
-	CreatedAt     time.Time `json:"createdAt"`
+	CreatedAt     time.Time `josn:"createdAt"`
 	CreatorName   string    `json:"creatorName"`
 	GoingUsers    []User    `json:"goingUsers"`
 	NotGoingUsers []User    `json:"notGoingUsers"`
@@ -139,5 +139,5 @@ type Message struct {
 	TargetName  string    `json:"targetName"`
 	Body        string    `json:"body"`
 	MessageRead int       `json:"messageRead"`
-	CreatedAt   time.Time `json:"createdAt"`
+	CreatedAt   time.Time `josn:"createdAt"`
 }
