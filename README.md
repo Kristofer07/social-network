@@ -26,14 +26,6 @@ Users are able to communicate and send emojis via real time `private messages` o
 
 Currently, user is notified and can take action on `follow request`, `group invitation`, `group join request` and if an `event` is created in the group they are a member of.
 
-<br>
-
-Additional criterias that had to be met can be found here: [Task Objective and Audit](https://github.com/01-edu/public/tree/master/subjects/social-network)
-
----
-
-<br>
-
 ## How To Run
 
 ### Public version:
