@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -10,10 +11,13 @@ import (
 func (app *application) server() http.Handler {
 	mux := chi.NewRouter()
 
+	mediaFolder :=  app.workingDir + "/media/"
+
 	mux.Use(middleware.Recoverer)
 	mux.Get("/media/*", func(w http.ResponseWriter, r *http.Request) {
-		http.StripPrefix("/media/", http.FileServer(http.Dir("../media"))).ServeHTTP(w, r)
+		http.StripPrefix("/media/", http.FileServer(http.Dir(mediaFolder))).ServeHTTP(w, r)
 	})
+
 
 	mux.Get("/", app.Home)
 
@@ -103,3 +107,14 @@ func (app *application) enableCORS(h http.Handler) http.Handler {
 		}
 	})
 }
+
+
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	r.Get(path+"/*", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Hitting")
+		fs.ServeHTTP(w, r)
+	})
+}
+

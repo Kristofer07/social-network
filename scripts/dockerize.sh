@@ -17,4 +17,4 @@ done
 # Run the containers
 echo -e "Starting images...\n"
 
-docker-compose up
+docker compose up

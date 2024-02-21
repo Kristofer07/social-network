@@ -150,18 +150,6 @@ INSERT INTO user_groups (groupId, userId) VALUES (3, 5);
 
 INSERT INTO user_groups (groupId, userId) VALUES (3, 6);
 
-
--- Notifications
-
--- INSERT INTO notifications (userId, sourceId, type, seen, createdAt, actioned)
--- VALUES
---     (2, 1, 'follow_request', 1, '1682945370', 1);
---     (2, 2, 'group_invitation', 0, '2023-04-28 20:17:03', 4),
---     (2, 1, 'group_join_request',0, '2023-04-28 20:19:43', 3),
---     (2, 3, 'group_event',0, '2023-04-28 20:19:43', 0);
-
--- Messages
-
 INSERT INTO user_messages (senderId, targetId, body)
 VALUES (2, 1, "I will 📞 you later");
 

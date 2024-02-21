@@ -15,14 +15,16 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-const postImagePath = "media/post_images/"
-const groupImagePath = "media/group_images/"
-const commentImagePath = "media/comment_images/"
-const profileImagePath = "media/profile_images/"
+const postImagePath = "/media/post_images/"
+const groupImagePath = "/media/group_images/"
+const commentImagePath = "/media/comment_images/"
+const profileImagePath = "/media/profile_images/"
 
 // use utils.go JSON helpers(writeJson, readJson, errorJson)
 
 func (app *application) Home(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(app.workingDir + postImagePath)
+	fmt.Println("Image Saved to: ", app.workingDir +  profileImagePath)
 	payload := struct {
 		Status  string `json:"status"`
 		Message string `json:"message"`
@@ -169,7 +171,7 @@ func (app *application) ProfileImageHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	file, err := os.Open(profileImagePath + user.Image)
+	file, err := os.Open(app.workingDir +  profileImagePath + user.Image)
 	if err != nil {
 		app.errorJson(w, fmt.Errorf("failed to open file"), http.StatusInternalServerError)
 		return
@@ -177,6 +179,7 @@ func (app *application) ProfileImageHandler(w http.ResponseWriter, r *http.Reque
 	defer file.Close()
 
 	w.Header().Set("Content-Type", "image/jpeg")
+	fmt.Println("Profile Image", file.Name())
 
 	_, err = io.Copy(w, file)
 	if err != nil {
@@ -198,8 +201,8 @@ func (app *application) GroupImageHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	fmt.Println(groupImagePath + group.Img)
-	file, err := os.Open(groupImagePath + group.Img)
+	fmt.Println(app.workingDir + groupImagePath + group.Img)
+	file, err := os.Open(app.workingDir + groupImagePath + group.Img)
 	if err != nil {
 		app.errorJson(w, fmt.Errorf("failed to open file"), http.StatusInternalServerError)
 		return
@@ -290,7 +293,7 @@ func (app *application) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	_ = app.writeJson(w, http.StatusOK, users, nil)
 }
 
-// Register Handler
+// jegister Handler
 
 func (app *application) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
@@ -302,15 +305,20 @@ func (app *application) RegisterHandler(w http.ResponseWriter, r *http.Request) 
 		_ = app.errorJson(w, fmt.Errorf("form not valid"), http.StatusUnauthorized)
 		return
 	}
+	// check there is a user with that email
 	err = repository.EmailTaken(user.Email)
 	if err != nil {
 		_ = app.errorJson(w, fmt.Errorf("email taken"), http.StatusUnauthorized)
 		return
 	}
+	// check the name of the file user uploaded 
 	if user.Image == "" {
+		// if the the file entry is empty then set the user's image as default
 		user.Image = "default_profile.png"
 	} else {
-		imgName, err := saveBase64Image(user.Image, profileImagePath)
+		// otherwise save the image file as the name set and save it to the path
+		imgName, err := saveBase64Image(user.Image, app.workingDir +  profileImagePath)
+		fmt.Println("Image Saved to: ", app.workingDir +  profileImagePath)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -400,7 +408,7 @@ func (app *application) PostUserPost(w http.ResponseWriter, r *http.Request) {
 	post.CreatedBy = user.FirstName + " " + user.LastName
 
 	if post.Img != "" {
-		img, err := saveBase64Image(post.Img, postImagePath)
+		img, err := saveBase64Image(post.Img, app.workingDir +  postImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("can't save image error: %v", err), http.StatusUnauthorized)
 			return
@@ -444,7 +452,7 @@ func (app *application) DeleteUserPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if image != "" {
-		err = deleteImage(image, postImagePath)
+		err = deleteImage(image, app.workingDir +  postImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("cannot delete post image"), http.StatusInternalServerError)
 			return
@@ -566,7 +574,7 @@ func (app *application) PostComment(w http.ResponseWriter, r *http.Request) {
 	comment.CreatedBy = user.FirstName + " " + user.LastName
 
 	if comment.Img != "" {
-		img, err := saveBase64Image(comment.Img, commentImagePath)
+		img, err := saveBase64Image(comment.Img,app.workingDir +  commentImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("can't save comment image error: %v", err), http.StatusUnauthorized)
 			return
@@ -648,7 +656,7 @@ func (app *application) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if image != "" {
-		err := deleteImage(image, commentImagePath)
+		err := deleteImage(image, app.workingDir +  commentImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("cannot delete post image"), http.StatusInternalServerError)
 			return
@@ -703,7 +711,7 @@ func (app *application) PostGroupPosts(w http.ResponseWriter, r *http.Request) {
 	post.CreatedBy = user.FirstName + " " + user.LastName
 
 	if post.Img != "" {
-		img, err := saveBase64Image(post.Img, postImagePath)
+		img, err := saveBase64Image(post.Img, app.workingDir + postImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("can't save image error: %v", err), http.StatusUnauthorized)
 			return
@@ -736,7 +744,7 @@ func (app *application) DeleteGroupPosts(w http.ResponseWriter, r *http.Request)
 	}
 
 	if image != "" {
-		err = deleteImage(image, groupImagePath)
+		err = deleteImage(image, app.workingDir + groupImagePath)
 		if err != nil {
 			_ = app.errorJson(w, fmt.Errorf("cannot delete post image"), http.StatusInternalServerError)
 			return
@@ -778,7 +786,7 @@ func (app *application) PostGroups(w http.ResponseWriter, r *http.Request) {
 	if group.Img == "" {
 		group.Img = "default_group.png"
 	} else {
-		imgName, err := saveBase64Image(group.Img, groupImagePath)
+		imgName, err := saveBase64Image(group.Img, app.workingDir + groupImagePath)
 		if err != nil {
 			log.Println(err)
 		}
